@@ -1,0 +1,24 @@
+[
+    {
+        "id": 1,
+        "fullName": "John Doe",
+        "email": "john.320241234@ejust.edu.eg",
+        "password": "$2y$10$aSdSGBbn6G.3RcFyykBrsugDo8VXxUi5cI77Zd9qgrUgnBrCh0iMK",
+        "program": "CSC",
+        "level": 2,
+        "enrollmentYear": 2024,
+        "profilePicture": "https:\/\/api.dicebear.com\/7.x\/avataaars\/svg?seed=john",
+        "created_at": "2025-12-30 10:34:40"
+    },
+    {
+        "id": 2,
+        "fullName": "Jane Smith",
+        "email": "jane.320241235@ejust.edu.eg",
+        "password": "$2y$10$UtyNrBl2tMu9c8sJcuFUqu7OP80khygVZXp1cuDUSLWg1K7MMRWgq",
+        "program": "AID",
+        "level": 3,
+        "enrollmentYear": 2024,
+        "profilePicture": "https:\/\/api.dicebear.com\/7.x\/avataaars\/svg?seed=jane",
+        "created_at": "2025-12-30 10:34:40"
+    }
+]
