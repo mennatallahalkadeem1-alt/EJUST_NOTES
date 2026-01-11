@@ -1,156 +1,245 @@
-# Be Cosmo – Social Media Platform
+# 📘 E-JUST Notes
 
-## 🌐 Be Cosmo – Social Media Platform
-
-**Be Cosmo** is a minimalist and responsive social media web application that allows users to create accounts, manage profiles, and interact with posts in real time. The platform offers a seamless user experience through simple authentication, intuitive navigation, and engaging social features such as likes, comments, and following.
+A comprehensive web application for students at **E-JUST** (Egypt-Japan University of Science and Technology) to upload, share, browse, and rate academic notes, organized by program, level, and semester.
 
 ---
 
 ## ✨ Features
 
-### 🔐 User Authentication
-- User registration, login, and logout
-- Secure password encryption
-- Email verification for account validation
-
-### 📝 Post Management
-- Create, edit, and delete text-based posts
-- Support for media content: images, videos, and links
-
-### 📰 Feed / Timeline
-- Displays posts from all users or followed users
-- Posts sorted by recency or popularity
-
-### ❤️ Likes & Comments
-- Like and unlike posts
-- Add, view, and manage comments
-
-### 🔍 Search Functionality
-- Search users or posts by keywords
-
-### 👥 Follow System
-- Follow or unfollow other users
-- View followers and following lists
-
-### 🔔 Notifications
-- Real-time alerts for likes, comments, and follows
-
-### 📱 Responsive Design
-- Optimized for both desktop and mobile devices
-
-### ⚙️ Account Settings
-- Change password and email address
-- Update username
-- Toggle between light and dark mode
+- 🔐 **User Authentication** – Secure login/signup with E-JUST email validation
+- 📚 **Course-Based Note Browsing** – Filter notes by program, level, and semester
+- ⭐ **Rating System** – Rate notes with 1–5 stars
+- 📤 **File Upload** – Upload PDF, JPG, PNG files (max 10MB)
+- 🗂️ **Personal Profile** – View and manage your uploaded notes
+- 🧠 **Smart Filtering** – Automatically filters courses based on your program and level
+- 📱 **Responsive Design** – Works on desktop, tablet, and mobile
+- 🔍 **Quick Upload** – One-click upload from course folder view
+- 🗑️ **Note Management** – Delete your own notes with confirmation
 
 ---
 
-## 🛠️ Requirements
+## 🛠️ Tech Stack
 
-To run this project locally, you will need:
-
-- Any operating system (Windows, macOS, or Linux)
-- Python 3.8 or higher
-- Flutter SDK and [Flet](https://flet.dev) (Python UI framework)
-- Any code editor (e.g., VS Code, PyCharm, Android Studio)
-- A Firebase project configured with:
-  - Firestore
-  - Firebase Authentication
-- Basic knowledge of Python, Flutter/Flet, and Firebase
+- **Frontend**: HTML, CSS (Flexbox, Grid), JavaScript
+- **Backend**: PHP (PDO for database operations)
+- **Database**: MySQL
+- **File Storage**: Local `uploads/` directory
+- **Avatar Generation**: DiceBear API
 
 ---
 
-## 🧱 Tech Stack
+## 📁 Project Structure
 
-### 👨‍💻 Frontend
-- **Flutter Flet** – for cross-platform UI development using Python
-- **Dart (under the hood)** – powers the Flet framework
-- **Flet (Python package)** – reactive front-end framework
-
-### 🧠 Backend
-- **Python** – main server-side language
-- **requests** – used for HTTP requests to access Firebase services
-
-### ☁️ Cloud Services (Firebase)
-- **Firebase Authentication** – handles user auth
-- **Cloud Firestore** – real-time database
-
----
-
-## 🔥 Database Structure (Firebase Firestore)
-
-The app uses **Cloud Firestore** to manage user and post data. Below is the structure:
-
-### 📁 Collections
-
-#### 1. `users`
-Each document represents a single user profile.
-
-**Fields:**
-- `createdAt`: Timestamp of account creation
-- `displayName`: User's display name
-- `email`: User's email
-- `followers`: Map of user IDs who follow this user
-- `following`: Map of user IDs this user follows
-- `notifications`: User-specific notifications
-
-**Subcollections:**
-- `chats`: Each document represents a chat or conversation thread (e.g., `intro_chat`)
+```
+ejust-notes/
+├── index.php              # Login & registration page
+├── home.php              # Main dashboard with notes browsing
+├── upload.php            # Note upload form
+├── profile.php           # User profile and note management
+├── logout.php            # Session logout
+├── db.php                # Database connection & table creation
+├── uploads/              # Uploaded files directory (auto-created)
+├── home.css              # Styles for home page
+├── home.js               # JavaScript for home page interactivity
+├── profile.css           # Profile page styles
+├── upload.css            # Upload page styles
+└── README.md             # This file
+```
 
 ---
 
-#### 2. `posts`
-Each document represents a user-created post.
+## 🗄️ Database Schema
 
-**Fields:**
-- `text`: Post content
-- `timePosted`: Timestamp of creation
-- `username`: Creator of the post
-- `comments`: Array of comment objects or strings
-- `likes`: Array of user IDs who liked the post
+### Users Table
+- `id` (INT, PRIMARY KEY)
+- `fullName` (VARCHAR)
+- `email` (VARCHAR, UNIQUE)
+- `password` (VARCHAR)
+- `program` (VARCHAR) – CSC, AID, CNC, BIF
+- `level` (INT) – 1–4
+- `enrollmentYear` (INT)
+- `profilePicture` (TEXT)
+
+### Notes Table
+- `id` (INT, PRIMARY KEY)
+- `title` (VARCHAR)
+- `course_id` (INT, FOREIGN KEY to courses.id)
+- `description` (TEXT)
+- `fileName` (VARCHAR)
+- `filePath` (VARCHAR)
+- `uploaderId` (INT, FOREIGN KEY to users.id)
+- `uploaderName` (VARCHAR)
+- `uploadDate` (DATE)
+
+### Ratings Table
+- `id` (INT, PRIMARY KEY)
+- `note_id` (INT, FOREIGN KEY to notes.id)
+- `user_id` (INT, FOREIGN KEY to users.id)
+- `rating` (INT) – 1–5
+
+### Courses Table (to be created)
+- `id` (INT, PRIMARY KEY)
+- `code` (VARCHAR) – Course code (e.g., "CSE101")
+- `name` (VARCHAR) – Course name
+- `level` (INT) – 1–4
+- `semester` (VARCHAR) – "Fall", "Spring"
+- `programs` (TEXT) – Comma-separated program IDs (e.g., "CSC,AID")
+
+---
+
+## 🚀 Setup Instructions
+
+### 1. Clone Repository
+```bash
+git clone https://github.com/yourusername/ejust-notes.git
+cd ejust-notes
+```
+
+### 2. Database Setup
+Import the SQL schema (create the following tables):
+
+```sql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fullName VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    program VARCHAR(10) NOT NULL,
+    level INT NOT NULL,
+    enrollmentYear INT NOT NULL,
+    profilePicture TEXT
+);
+
+CREATE TABLE notes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    course_id INT NOT NULL,
+    description TEXT,
+    fileName VARCHAR(255) NOT NULL,
+    filePath VARCHAR(255) NOT NULL,
+    uploaderId INT NOT NULL,
+    uploaderName VARCHAR(100) NOT NULL,
+    uploadDate DATE DEFAULT (CURRENT_DATE),
+    FOREIGN KEY (uploaderId) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses(id)
+);
+
+CREATE TABLE ratings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    note_id INT NOT NULL,
+    user_id INT NOT NULL,
+    rating INT CHECK (rating >= 1 AND rating <= 5),
+    FOREIGN KEY (note_id) REFERENCES notes(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_rating (note_id, user_id)
+);
+
+CREATE TABLE courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(20) NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    level INT NOT NULL,
+    semester VARCHAR(10) NOT NULL,
+    programs TEXT NOT NULL
+);
+```
+
+### 3. Configure Database
+Edit `db.php` with your MySQL credentials:
+
+```php
+$host = 'localhost';
+$user = 'your_username';
+$pass = 'your_password';
+$dbname = 'ejust_notes';
+```
+
+### 4. Create Uploads Directory
+```bash
+mkdir uploads
+chmod 777 uploads  # Or appropriate permissions for your server
+```
+
+### 5. Add Courses Data
+Insert your university courses into the `courses` table. Example:
+
+```sql
+INSERT INTO courses (code, name, level, semester, programs) VALUES
+('CSE101', 'Introduction to Programming', 1, 'Fall', 'CSC,AID'),
+('MAT101', 'Calculus I', 1, 'Fall', 'CSC,AID,CNC,BIF'),
+-- Add more courses as needed
+```
+
+### 6. Run on Local Server
+```bash
+php -S localhost:8000
+```
+Then visit `http://localhost:8000`
 
 ---
 
-## 📸 Screenshots
+## 🧪 Testing Accounts
 
-Below are screenshots showcasing the **Be Cosmo** app's key features and responsive design across devices. (Replace the placeholders with actual image links or paths after capturing the screenshots.)
+Use the following format for emails:
+- `name.32024XXXX@ejust.edu.eg` (replace XXXX with numbers)
+- Example: `mohamed.320240001@ejust.edu.eg`
 
-- **Login Screen**: Displays the user authentication interface.
-  
-  <img src="screenshots/login.png" alt="Login Screen" width="70%">
-
-- **User Profile**: Shows user details, followers, and following lists.  
-  <img src="userprofile.png" alt="user profile Screen" width="70%">
-
-- **Feed/Timeline**: Displays posts sorted by recency or popularity.
-- 
-  <img src="screenshots/feed.png" alt="feed Screen" width="70%">
-
-- **Post Interaction**: Highlights likes and comments on a post.  
-  <img src="screenshots/interactionWithPost.png" alt="feed2 Screen" width="70%">
-
-- **Chat**: Shows chat screen  
-  <img src="screenshots/chat.png" alt="Chat Screen" width="70%">
+Password requirements:
+- Minimum 6 characters
+- Must contain letters and numbers
 
 ---
 
-## Installation
+## 🎨 UI Components
 
-Build Be_Cosmo from the source and install dependencies:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/anoureen2006/Be_Cosmo
-   ```
-
-2. Navigate to the project directory:
-   ```bash
-   cd Be_Cosmo
-   ```
-
-3. Install the dependencies:
-   ```bash
-   # Add dependency installation command here (e.g., pip install -r requirements.txt)
-   ```
+- **Home Page**: Course grid, filters, rating system
+- **Upload Page**: Form with course dropdown and file upload
+- **Profile Page**: User stats and note management
+- **Note Cards**: Display with preview, download button, and rating stars
 
 ---
+
+## 🔒 Security Features
+
+- Password hashing with `password_hash()`
+- Prepared statements to prevent SQL injection
+- Session-based authentication
+- File type validation (PDF, JPG, PNG only)
+- File size limit (10MB)
+- E-JUST email validation regex
+
+---
+
+## 📊 Future Enhancevements
+
+- [ ] Search functionality
+- [ ] Advanced filters (by date, rating)
+- [ ] Admin dashboard
+- [ ] Email notifications
+- [ ] Comments on notes
+- [ ] File preview for all file types
+- [ ] Dark mode
+
+---
+
+## 📝 License
+
+This project is for educational purposes. Developed for E-JUST students.
+
+---
+
+## 👨‍💻 Author
+
+[Your Name]  
+E-JUST University  
+CSIT Department
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome! For major changes, please open an issue first to discuss what you'd like to change.
+
+---
+
+**Note**: This project requires a running MySQL server and PHP 7.4+ with PDO extension enabled.
