@@ -230,7 +230,7 @@ This project is for educational purposes. Developed for E-JUST students.
 
 ## 👨‍💻 Author
 
-[Your Name]  
+MennatAllah Gamal Muhammed
 E-JUST University  
 CSIT Department
 
